@@ -1,0 +1,73 @@
+# Install long-term support (LTS) Node.js
+winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
+
+After installation finishes, verify: (open new terminal)
+node -v
+npm -v
+
+You should see something like:
+v20.x.x
+10.x.x
+
+Step 2 — Create a new Cypress project folder
+
+mkdir C:\CypressDemo
+cd C:\CypressDemo
+npm init -y
+
+
+This creates a package.json file with default settings.
+
+Step 3 — Install Cypress
+npm install cypress --save-dev
+
+Step 4 — Add helpful npm scripts
+Open package.json in Notepad or VS Code and under "scripts" add:
+
+"scripts": {
+  "cypress:open": "cypress open",
+  "cypress:run": "cypress run",
+  "test": "npm run cypress:run"
+}
+
+
+Or run this PowerShell one-liner to append automatically:
+
+(Get-Content package.json) -replace '"test": "echo.*', '"cypress:open": "cypress open", "cypress:run": "cypress run", "test": "npm run cypress:run"' | Set-Content package.json
+
+Step 5 — Initialize Cypress folders
+npx cypress open
+Cypress will:
+
+create a cypress/ folder (with example specs),
+
+open its Test Runner GUI.
+You can close the GUI after it finishes scaffolding.
+
+Step 6 — Create your first test
+New-Item -Path "cypress\e2e\firstTest.cy.js" -ItemType File -Force
+notepad cypress\e2e\firstTest.cy.js
+
+New-Item -Path "e2e\firstTest.cy.js" -ItemType File -Force
+notepad e2e\firstTest.cy.js
+
+
+describe('My First Cypress Test', () => {
+  it('Visits example.com and checks title', () => {
+    cy.visit('https://example.cypress.io')
+    cy.contains('type').click()
+    cy.url().should('include', '/commands/actions')
+  })
+})
+
+
+Step 7 — Run your test
+Interactive mode (shows GUI):
+npm run cypress:open
+
+Headless (CLI only):
+npm run cypress:run
+
+
+
+
